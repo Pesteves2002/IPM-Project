@@ -1,15 +1,15 @@
-- [] Adicionar botão Menu
-- [] Loan info nas availables loans com botões de confirmação
-- [] Reestrutura (+) no Menu Principal
-- [] Distinguish various wallets
-- [] Balance should be in specfiic wallet currency
-- [] Option to select amount or say "dont care" - ask for a loan
-- [] Add revelant info in every loan
-- [] ADD FILTER SYSTEM
-- [] Não se sabe qual wallet com a moeda x
-- [] As pessoas nao estao a usar a barra em baixo (Alguns usam)
-- [] Ter botão "My loans"
-- [] Luís pensou que coin era wallet
-- [] Wallet info diferente de ver
-- [] Carteira com várias moedas
-- [] Meter vazio as coisas a criar uma loan
+- [ ] Adicionar botão Menu
+- [ ] Loan info nas availables loans com botões de confirmação
+- [ ] Reestrutura (+) no Menu Principal
+- [ ] Distinguish various wallets
+- [ ] Balance should be in specfiic wallet currency
+- [ ] Option to select amount or say "dont care" - ask for a loan
+- [ ] Add revelant info in every loan
+- [ ] ADD FILTER SYSTEM
+- [ ] Não se sabe qual wallet com a moeda x
+- [ ] As pessoas nao estao a usar a barra em baixo (Alguns usam)
+- [ ] Ter botão "My loans"
+- [ ] Luís pensou que coin era wallet
+- [ ] Wallet info diferente de ver
+- [ ] Carteira com várias moedas
+- [ ] Meter vazio as coisas a criar uma loan
