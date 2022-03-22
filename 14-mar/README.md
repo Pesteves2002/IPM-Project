@@ -2,16 +2,24 @@ General
 - [x] Improve Ask for a loan
 - [x] Add Back Button
 - [x] Create Under construction prompt
+
+
 User 1
 - [x] Home page confusing
 - [x] Wallet menu lacks critical information
 - [x] Improve available loans menu
+
+
 User 2
 - [x] Add Total value of money (in €) at the top of the wallet menu
 - [x] Add a filter
+
+
 User 3
 - [x] Logo confused with button
 - [x] Add a filter
+
+
 User 4 (Teacher)
 - [x] Change "Add currency"  name to something better
 - [x] Change filter settings
