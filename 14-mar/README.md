@@ -1,25 +1,26 @@
-- [x] Ask for a loan, back button
-- [x] Under construction prompt
-      Rafa
-- [x] menu inicail confuso
-- [x] menu wallet pouca info
-- [x] available loans
-      Xico Lopes
-- [x] Total no topo da wallet
-- [x] Filtro melhor com mais informacoes
-      Tomás marques
-- [x] Logotipo confundido com botao
-- [x] filtro my loans
-      Tiago Santos
-- [x] Add currency change name to something better
+General
+- [x] Improve Ask for a loan
+- [x] Add Back Button
+- [x] Create Under construction prompt
+User 1
+- [x] Home page confusing
+- [x] Wallet menu lacks critical information
+- [x] Improve available loans menu
+User 2
+- [x] Add Total value of money (in €) at the top of the wallet menu
+- [x] Add a filter
+User 3
+- [x] Logo confused with button
+- [x] Add a filter
+User 4 (Teacher)
+- [x] Change "Add currency"  name to something better
 - [x] Change filter settings
-      Teacher
 - [x] Confusion with wallet, graph add label
-- [x] Confusion with symbols (easily fixable)
-- [ ] Use the correct values for the test IMPORTANT
-- [x] Add label with the initial value
-- [x] reselect chosen coin in menu with the intererst rate
-- [x] Add money to lend (perhaps)
-- [x] Available loans change to anything more explicit
-- [x] Available loan, change to money
-- [x] filter with filter and sort
+- [x] Confusion with symbols
+- [x] Use the correct values for the test
+- [x] Add label with the initial value at borrow
+- [x] Reselect chosen coin in menu with the intererst rate
+- [x] Add money to lend
+- [x] Change "Available loans" to anything more explicit
+- [x] In "Available loan", change to money (in €)
+- [x] Add filter and sort
