@@ -60,15 +60,48 @@ function draw() {
     textAlign(LEFT);
     text("Trial " + (current_trial + 1) + " of " + trials.length, 50, 20);
 
-    // Draw all 18 targets
-    for (var i = 0; i < 18; i++) drawTarget(i);
-
-    // Draw the user input area
-    drawInputArea();
-
     // Draw the virtual cursor
     let x = map(mouseX, inputArea.x, inputArea.x + inputArea.w, 0, width);
     let y = map(mouseY, inputArea.y, inputArea.y + inputArea.h, 0, height);
+
+    // Draw all 18 targets
+    for (var i = 0; i < 18; i++) {
+      drawTarget(i, x, y);
+    }
+
+    let previous_target = getTargetBounds(trials[current_trial - 1]);
+    let current_target = getTargetBounds(trials[current_trial]);
+    let next_target = getTargetBounds(trials[current_trial + 1]);
+
+    stroke(color(0, 0, 255));
+    strokeWeight(5);
+    fill(color(0, 0, 255));
+    line(
+      previous_target.x,
+      previous_target.y,
+      current_target.x,
+      current_target.y
+    );
+
+    slope_x = current_target.x - previous_target.x;
+    slope_y = current_target.y - previous_target.y;
+
+    midpoint_x = (current_target.x - previous_target.x) / 2;
+    midpoint_y = (current_target.y - previous_target.y) / 2;
+
+    slope_x = -slope_x;
+
+    triangle(
+      current_target.x,
+      current_target.y,
+      current_target.x - previous_target.x,
+      current_target.y - previous_target.y,
+      current_target.x,
+      current_target.y
+    );
+
+    // Draw the user input area
+    drawInputArea();
 
     fill(color(255, 255, 255));
     circle(x, y, 0.5 * PPCM);
@@ -207,7 +240,7 @@ function mousePressed() {
 }
 
 // Draw target on-screen
-function drawTarget(i) {
+function drawTarget(i, x, y) {
   // Get the location and size for target (i)
   let target = getTargetBounds(i);
 
@@ -218,14 +251,14 @@ function drawTarget(i) {
     if (trials[current_trial] === i) {
       // Highlights the target the user should be trying to select
       // with a white border
-      fill(color(255, 0, 0));
+      fill(color(0, 255, 0));
 
       // Remember you are allowed to access targets (i-1) and (i+1)
       // if this is the target the user should be trying to select
       //
     } else {
       if (trials[current_trial + 1] === i) {
-        fill(color(0, 255, 0));
+        fill(color(0, 115, 27));
       } else {
         // Does not draw a border if this is not the target the user
         // should be trying to select
@@ -233,7 +266,13 @@ function drawTarget(i) {
       }
     }
   }
-  noStroke();
+
+  if (dist(target.x, target.y, x, y) < target.w / 2) {
+    stroke(color(255, 0, 0));
+    strokeWeight(7);
+  } else {
+    noStroke();
+  }
 
   // Draws the target
   circle(target.x, target.y, target.w);
