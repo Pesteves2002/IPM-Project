@@ -25,18 +25,14 @@ Low accuracy rates
 High time between target hits
 - Users are taking on average 750ms to move between targets
 
-Changes to make:
 Aim assist (not doable)
-Change crosshair
 
-Add a hit/miss message
-
-Add an arrow from target to target
-
-Add highlight
-
-Add sound
-
+Changes to make:
+ - [ ] Change crosshair
+ - [ ] Add a hit/miss message
+ - [ ] Add an arrow from target to target
+ - [x] Add highlight 
+ - [ ] Add sound
 
 
 
