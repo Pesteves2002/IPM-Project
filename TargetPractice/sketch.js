@@ -85,8 +85,17 @@ function draw() {
 
     let slope_x = current_target.x - previous_target.x;
     let slope_y = current_target.y - previous_target.y;
-
     let slope_final = slope_y / slope_x;
+    if (slope_x == 0) {
+      slope_final = 9999;
+    }
+    if (slope_y == 0) {
+      slope_final = 0.0001;
+    }
+
+    if (slope_x == 0 && slope_y == 0) {
+      slope_final = NaN;
+    }
 
     slope_final = -1 / slope_final;
 
