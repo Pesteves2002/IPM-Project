@@ -83,21 +83,66 @@ function draw() {
       current_target.y
     );
 
-    slope_x = current_target.x - previous_target.x;
-    slope_y = current_target.y - previous_target.y;
+    let slope_x = current_target.x - previous_target.x;
+    let slope_y = current_target.y - previous_target.y;
 
-    midpoint_x = (current_target.x - previous_target.x) / 2;
-    midpoint_y = (current_target.y - previous_target.y) / 2;
+    let slope_final = slope_y / slope_x;
 
-    slope_x = -slope_x;
+    slope_final = -1 / slope_final;
+
+    let midpoint_x = (current_target.x + previous_target.x) / 2;
+    let midpoint_y = (current_target.y + previous_target.y) / 2;
+
+    let d = midpoint_y - midpoint_x * slope_final;
+
+    let test1 = 50;
+    let test2 = 1500;
+
+    line(test1, test1 * slope_final + d, test2, test2 * slope_final + d);
+
+    fill(color(0, 255, 255));
+    noStroke();
+
+    circle(midpoint_x, midpoint_y, 15);
+    print(d);
+    let radius = 1000;
+
+    let a = 1 + Math.pow(slope_final, 2);
+    let b = 2 * (-midpoint_x + slope_final * d - slope_final * midpoint_y);
+
+    c =
+      Math.pow(midpoint_x, 2) +
+      Math.pow(d, 2) -
+      2 * d * midpoint_y +
+      Math.pow(midpoint_y, 2) -
+      radius;
+
+    let root1;
+    let root2;
+    // calculate discriminant
+    let discriminant = b * b - 4 * a * c;
+    print(a, b, c);
+    // condition for real and different roots
+    if (discriminant > 0) {
+      root1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+      root2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+
+      // result
+      console.log(`The roots of quadratic equation are ${root1} and ${root2}`);
+    }
+
+    print(root1, root2);
+
+    circle(root1, root1 * slope_final + d, 15);
+    circle(root2, root2 * slope_final + d, 15);
 
     triangle(
       current_target.x,
       current_target.y,
-      current_target.x - previous_target.x,
-      current_target.y - previous_target.y,
-      current_target.x,
-      current_target.y
+      root1,
+      root1 * slope_final + d,
+      root2,
+      root2 * slope_final + d
     );
 
     // Draw the user input area
