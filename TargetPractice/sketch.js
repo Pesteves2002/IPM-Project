@@ -368,6 +368,13 @@ function drawArrow(typeOfArrow) {
 
   let midpoint_x = (current_target.x + previous_target.x) / 2;
   let midpoint_y = (current_target.y + previous_target.y) / 2;
+  
+  
+  midpoint_x = (midpoint_x + current_target.x )/2;
+  midpoint_y = (midpoint_y + current_target.y )/2;
+  
+  let radius =  Math.pow(current_target.x -  midpoint_x ,2) + Math.pow(current_target.y -  midpoint_y ,2);
+  radius = Math.sqrt(radius);
 
   let d = midpoint_y - midpoint_x * slope_final;
 
@@ -381,7 +388,6 @@ function drawArrow(typeOfArrow) {
 
   circle(midpoint_x, midpoint_y, 15);
   print(d);
-  let radius = 1000;
 
   let a = 1 + Math.pow(slope_final, 2);
   let b = 2 * (-midpoint_x + slope_final * d - slope_final * midpoint_y);
