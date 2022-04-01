@@ -6,7 +6,7 @@
 // p5.js reference: https://p5js.org/reference/
 
 // Database (CHANGE THESE!)
-const GROUP_NUMBER = 0; // Add your group number here as an integer (e.g., 2, 3)
+const GROUP_NUMBER = 7; // Add your group number here as an integer (e.g., 2, 3)
 const BAKE_OFF_DAY = true; // Set to 'true' before sharing during the bake-off day
 
 // Target and grid properties (DO NOT CHANGE!)
@@ -368,12 +368,13 @@ function drawArrow(typeOfArrow) {
 
   let midpoint_x = (current_target.x + previous_target.x) / 2;
   let midpoint_y = (current_target.y + previous_target.y) / 2;
-  
-  
-  midpoint_x = (midpoint_x + current_target.x )/2;
-  midpoint_y = (midpoint_y + current_target.y )/2;
-  
-  let radius =  Math.pow(current_target.x -  midpoint_x ,2) + Math.pow(current_target.y -  midpoint_y ,2);
+
+  midpoint_x = (midpoint_x + current_target.x) / 2;
+  midpoint_y = (midpoint_y + current_target.y) / 2;
+
+  let radius =
+    Math.pow(current_target.x - midpoint_x, 2) +
+    Math.pow(current_target.y - midpoint_y, 2);
   radius = Math.sqrt(radius);
 
   let d = midpoint_y - midpoint_x * slope_final;
