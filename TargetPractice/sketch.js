@@ -34,6 +34,7 @@ let fitts_IDs = []; // add the Fitts ID for each selection here (-1 when there i
 const HIT_BACKGROUND_COLOUR = 0;
 const MISS_BACKGROUND_COLOUR = 1;
 const DEFAULT_BACKGROUND_COLOR = 2;
+const STREAK_BACKGROUND_COLOR = 3;
 
 let background_colour = DEFAULT_BACKGROUND_COLOR;
 
@@ -61,7 +62,9 @@ function setup() {
 function draw() {
   if (draw_targets) {
     // The user is interacting with the 6x3 target grid
-
+    if (hits >= 52) {
+      background_colour = STREAK_BACKGROUND_COLOR;
+    }
     switch (background_colour) {
       case DEFAULT_BACKGROUND_COLOR:
         background(color(0, 0, 0)); // sets background to black
@@ -71,6 +74,9 @@ function draw() {
         break;
       case MISS_BACKGROUND_COLOUR:
         background(color(69, 1, 0)); // sets background to red
+        break;
+      case STREAK_BACKGROUND_COLOR:
+        background(color(189, 120, 0));
         break;
     }
 
@@ -242,13 +248,17 @@ function drawTarget(i, x, y) {
   let target = getTargetBounds(i);
 
   if (trials[current_trial + 1] === i && trials[current_trial] === i) {
-    fill(color(0, 0, 255));
+    fill(color(255, 192, 84));
+    stroke(color(255, 192, 84));
+    strokeWeight(10);
   } else {
     // Check whether this target is the target the user should be trying to select
     if (trials[current_trial] === i) {
       // Highlights the target the user should be trying to select
       // with a white border
       fill(color(0, 255, 0));
+      stroke(color(255, 192, 84));
+      strokeWeight(7);
 
       // Remember you are allowed to access targets (i-1) and (i+1)
       // if this is the target the user should be trying to select
@@ -256,10 +266,12 @@ function drawTarget(i, x, y) {
     } else {
       if (trials[current_trial + 1] === i) {
         fill(color(0, 115, 27));
+        noStroke();
       } else {
         // Does not draw a border if this is not the target the user
         // should be trying to select
         fill(color(155, 155, 155));
+        noStroke();
       }
     }
   }
@@ -267,8 +279,6 @@ function drawTarget(i, x, y) {
   if (dist(target.x, target.y, x, y) < target.w / 2) {
     stroke(color(255, 0, 0));
     strokeWeight(7);
-  } else {
-    noStroke();
   }
 
   // Draws the target
@@ -344,9 +354,26 @@ function drawInputArea() {
   strokeWeight(2);
 
   rect(inputArea.x, inputArea.y, inputArea.w, inputArea.h);
+
+  let i = trials[current_trial];
+
+  let target = getTargetBounds(i);
+
+  fill(color(255, 0, 0));
+  circle(
+    target.x -
+      parseInt(LEFT_PADDING) +
+      parseInt((i % 3) * (TARGET_SIZE + TARGET_PADDING) + MARGIN),
+    target.y -
+      parseInt(TOP_PADDING) +
+      parseInt(Math.floor(i / 3) * (TARGET_SIZE + TARGET_PADDING) + MARGIN),
+    50
+  );
 }
 
 function drawLine(typeOfLine) {
+  // typeOfLine = 0, previous to current
+  // typeOfLine = 1, current to next
   let previous_target;
   let current_target;
   if (typeOfLine == 0) {
@@ -358,9 +385,14 @@ function drawLine(typeOfLine) {
     previous_target = getTargetBounds(trials[current_trial]);
     current_target = getTargetBounds(trials[current_trial + 1]);
   }
+  if (typeOfLine) {
+    strokeWeight(5);
+    stroke(color(0, 0, 255));
+  } else {
+    stroke(color(0, 207, 200));
+    strokeWeight(7);
+  }
 
-  stroke(color(0, 0, 255));
-  strokeWeight((6 * (2 - typeOfLine)) / 2);
   line(
     previous_target.x,
     previous_target.y,
