@@ -69,7 +69,7 @@ function draw() {
       drawTarget(i, x, y);
     }
 
-    drawArrows();
+    drawLines();
 
     // Draw the user input area
     drawInputArea();
@@ -320,17 +320,15 @@ function drawInputArea() {
   rect(inputArea.x, inputArea.y, inputArea.w, inputArea.h);
 }
 
-function drawArrows() {
-  drawArrow(0);
-  drawArrow(1);
+function drawLines() {
+  drawLine(1);
+  drawLine(0);
 }
 
-function drawArrow(typeOfArrow) {
-  print(current_trial);
-  print(typeOfArrow);
+function drawLine(typeOfLine) {
   let previous_target;
   let current_target;
-  if (typeOfArrow == 0) {
+  if (typeOfLine == 0) {
     if (current_trial == 0) return 0;
     previous_target = getTargetBounds(trials[current_trial - 1]);
     current_target = getTargetBounds(trials[current_trial]);
@@ -341,90 +339,11 @@ function drawArrow(typeOfArrow) {
   }
 
   stroke(color(0, 0, 255));
-  strokeWeight(5);
-  fill(color(0, 0, 255));
+  strokeWeight((4 * (2 - typeOfLine)) / 2);
   line(
     previous_target.x,
     previous_target.y,
     current_target.x,
     current_target.y
-  );
-
-  let slope_x = current_target.x - previous_target.x;
-  let slope_y = current_target.y - previous_target.y;
-  let slope_final = slope_y / slope_x;
-  if (slope_x == 0) {
-    slope_final = 9999;
-  }
-  if (slope_y == 0) {
-    slope_final = 0.0001;
-  }
-
-  if (slope_x == 0 && slope_y == 0) {
-    slope_final = NaN;
-  }
-
-  slope_final = -1 / slope_final;
-
-  let midpoint_x = (current_target.x + previous_target.x) / 2;
-  let midpoint_y = (current_target.y + previous_target.y) / 2;
-
-  midpoint_x = (midpoint_x + current_target.x) / 2;
-  midpoint_y = (midpoint_y + current_target.y) / 2;
-
-  let radius =
-    Math.pow(current_target.x - midpoint_x, 2) +
-    Math.pow(current_target.y - midpoint_y, 2);
-  radius = Math.sqrt(radius);
-
-  let d = midpoint_y - midpoint_x * slope_final;
-
-  let test1 = 50;
-  let test2 = 1500;
-
-  line(test1, test1 * slope_final + d, test2, test2 * slope_final + d);
-
-  fill(color(0, 255, 255));
-  noStroke();
-
-  circle(midpoint_x, midpoint_y, 15);
-  print(d);
-
-  let a = 1 + Math.pow(slope_final, 2);
-  let b = 2 * (-midpoint_x + slope_final * d - slope_final * midpoint_y);
-
-  c =
-    Math.pow(midpoint_x, 2) +
-    Math.pow(d, 2) -
-    2 * d * midpoint_y +
-    Math.pow(midpoint_y, 2) -
-    radius;
-
-  let root1;
-  let root2;
-  // calculate discriminant
-  let discriminant = b * b - 4 * a * c;
-  print(a, b, c);
-  // condition for real and different roots
-  if (discriminant > 0) {
-    root1 = (-b + Math.sqrt(discriminant)) / (2 * a);
-    root2 = (-b - Math.sqrt(discriminant)) / (2 * a);
-
-    // result
-    console.log(`The roots of quadratic equation are ${root1} and ${root2}`);
-  }
-
-  print(root1, root2);
-
-  circle(root1, root1 * slope_final + d, 15);
-  circle(root2, root2 * slope_final + d, 15);
-
-  triangle(
-    current_target.x,
-    current_target.y,
-    root1,
-    root1 * slope_final + d,
-    root2,
-    root2 * slope_final + d
   );
 }
