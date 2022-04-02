@@ -29,6 +29,14 @@ let current_trial = 0; // the current trial number (indexes into trials array ab
 let attempt = 0; // users complete each test twice to account for practice (attemps 0 and 1)
 let fitts_IDs = []; // add the Fitts ID for each selection here (-1 when there is a miss)
 
+// Backgruound colours
+
+const HIT_BACKGROUND_COLOUR = 0;
+const MISS_BACKGROUND_COLOUR = 1;
+const DEFAULT_BACKGROUND_COLOR = 2;
+
+let background_colour = DEFAULT_BACKGROUND_COLOR;
+
 // Target class (position and width)
 class Target {
   constructor(x, y, w) {
@@ -53,7 +61,18 @@ function setup() {
 function draw() {
   if (draw_targets) {
     // The user is interacting with the 6x3 target grid
-    background(color(0, 0, 0)); // sets background to black
+
+    switch (background_colour) {
+      case DEFAULT_BACKGROUND_COLOR:
+        background(color(0, 0, 0)); // sets background to black
+        break;
+      case HIT_BACKGROUND_COLOUR:
+        background(color(0, 43, 16)); // sets background to green
+        break;
+      case MISS_BACKGROUND_COLOUR:
+        background(color(69, 1, 0)); // sets background to red
+        break;
+    }
 
     // Print trial count at the top left-corner of the canvas
     fill(color(255, 255, 255));
@@ -64,12 +83,14 @@ function draw() {
     let x = map(mouseX, inputArea.x, inputArea.x + inputArea.w, 0, width);
     let y = map(mouseY, inputArea.y, inputArea.y + inputArea.h, 0, height);
 
+    drawLine(1);
+
     // Draw all 18 targets
     for (var i = 0; i < 18; i++) {
       drawTarget(i, x, y);
     }
 
-    drawLines();
+    drawLine(0);
 
     // Draw the user input area
     drawInputArea();
@@ -184,8 +205,13 @@ function mousePressed() {
         height
       );
 
-      if (dist(target.x, target.y, virtual_x, virtual_y) < target.w / 2) hits++;
-      else misses++;
+      if (dist(target.x, target.y, virtual_x, virtual_y) < target.w / 2) {
+        hits++;
+        background_colour = HIT_BACKGROUND_COLOUR;
+      } else {
+        misses++;
+        background_colour = MISS_BACKGROUND_COLOUR;
+      }
 
       current_trial++; // Move on to the next trial/target
     }
@@ -313,16 +339,11 @@ function windowResized() {
 
 // Responsible for drawing the input area
 function drawInputArea() {
-  noFill();
+  fill(color(0, 0, 0));
   stroke(color(220, 220, 220));
   strokeWeight(2);
 
   rect(inputArea.x, inputArea.y, inputArea.w, inputArea.h);
-}
-
-function drawLines() {
-  drawLine(1);
-  drawLine(0);
 }
 
 function drawLine(typeOfLine) {
@@ -339,7 +360,7 @@ function drawLine(typeOfLine) {
   }
 
   stroke(color(0, 0, 255));
-  strokeWeight((4 * (2 - typeOfLine)) / 2);
+  strokeWeight((6 * (2 - typeOfLine)) / 2);
   line(
     previous_target.x,
     previous_target.y,
