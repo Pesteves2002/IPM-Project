@@ -172,9 +172,9 @@ function printAndSavePerformance() {
     }
     let y;
     if (i < trials.length / 2) {
-      y = 320 + 30 * i;
+      y = 320 + 25 * i;
     } else {
-      y = 320 + 30 * (i - trials.length / 2);
+      y = 320 + 25 * (i - trials.length / 2);
     }
 
     text("Target " + (i + 1) + ": " + fitts_id, x, y);
