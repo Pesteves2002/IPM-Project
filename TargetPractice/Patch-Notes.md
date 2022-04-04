@@ -27,11 +27,13 @@ High time between target hits
 
 Aim assist (not doable)
 
+ - [x] Add an arrow from target to target (Cancelled)
+ - [x] Add highlight 
+
+ 
 Changes to make:
  - [ ] Change crosshair
  - [ ] Add a hit/miss message
- - [ ] Add an arrow from target to target
- - [x] Add highlight 
  - [ ] Add sound
 
 
