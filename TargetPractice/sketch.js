@@ -172,9 +172,9 @@ function printAndSavePerformance() {
     }
     let y;
     if (i < trials.length / 2) {
-      y = 320 + 20 * i;
+      y = 320 + 30 * i;
     } else {
-      y = 320 + 20 * (i - trials.length / 2);
+      y = 320 + 30 * (i - trials.length / 2);
     }
 
     text("Target " + (i + 1) + ": " + fitts_id, x, y);
@@ -407,6 +407,7 @@ function drawInputArea() {
 
   rect(inputArea.x, inputArea.y, inputArea.w, inputArea.h);
 
+  /*
   let i = trials[current_trial];
 
   let target = getTargetBounds(i);
@@ -421,6 +422,7 @@ function drawInputArea() {
       parseInt(Math.floor(i / 3) * (TARGET_SIZE + TARGET_PADDING) + MARGIN),
     50
   );
+  */
 }
 
 function drawLine(typeOfLine) {
