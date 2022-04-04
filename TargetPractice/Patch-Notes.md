@@ -15,17 +15,24 @@ If the current target is equal to the next target to blue
 
 28 march
 
+User feedback:
+Colours are confusing and non-intuitive
+- Blue is not a good colour to indicate a double-click
+- Users started clicking on green instead of red
+Low accuracy rates
+- Users are missing clicks because they think the pointer is on the target
+- There is no feedback if you hit/miss a target
+High time between target hits
+- Users are taking on average 750ms to move between targets
+
 Aim assist (not doable)
-Change crosshair
 
-Add a hit/miss message
-
-Add an arrow from target to target
-
-Add highlight
-
-Add sound
-
+Changes to make:
+ - [ ] Change crosshair
+ - [ ] Add a hit/miss message
+ - [ ] Add an arrow from target to target
+ - [x] Add highlight 
+ - [ ] Add sound
 
 
 
