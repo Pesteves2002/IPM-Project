@@ -281,7 +281,7 @@ function mousePressed() {
           height / 2 - continue_button.size().height / 2
         );
       }
-    }
+    } else if (current_trial === 1) testStartTime = millis();
   }
 }
 
