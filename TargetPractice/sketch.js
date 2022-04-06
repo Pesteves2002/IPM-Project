@@ -47,6 +47,12 @@ class Target {
   }
 }
 
+var miss_sound;
+
+function preload() {
+  miss_sound = loadSound("roblox-death-sound_1.mp3");
+}
+
 // Runs once at the start
 function setup() {
   createCanvas(700, 500); // window size in px before we go into fullScreen()
@@ -56,6 +62,8 @@ function setup() {
 
   textFont("Arial", 18); // font size for the majority of the text
   drawUserIDScreen(); // draws the user start-up screen (student ID and display size)
+
+  miss_sound.setVolume(1);
 }
 
 // Runs every frame and redraws the screen
@@ -259,6 +267,7 @@ function mousePressed() {
       } else {
         misses++;
         background_colour = MISS_BACKGROUND_COLOUR;
+        miss_sound.play();
         fitts_IDs[current_trial] = -1;
       }
 
