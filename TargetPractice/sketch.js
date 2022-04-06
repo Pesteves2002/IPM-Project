@@ -50,6 +50,7 @@ class Target {
 var miss_sound;
 
 function preload() {
+  hit_sound = loadSound("hs.mp3");
   miss_sound = loadSound("roblox-death-sound_1.mp3");
 }
 
@@ -63,6 +64,7 @@ function setup() {
   textFont("Arial", 18); // font size for the majority of the text
   drawUserIDScreen(); // draws the user start-up screen (student ID and display size)
 
+  hit_sound.setVolume(0.5);
   miss_sound.setVolume(1);
 }
 
@@ -264,6 +266,7 @@ function mousePressed() {
         fitts_id = Math.log2(distance / target.w + 1);
         fitts_IDs[current_trial] = fitts_id;
         if (current_trial == 0) fitts_IDs[current_trial] = -1;
+        hit_sound.play();
       } else {
         misses++;
         background_colour = MISS_BACKGROUND_COLOUR;
