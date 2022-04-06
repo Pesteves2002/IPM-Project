@@ -50,8 +50,8 @@ class Target {
 var miss_sound;
 
 function preload() {
-  hit_sound = loadSound("hs.mp3");
-  miss_sound = loadSound("roblox-death-sound_1.mp3");
+  hit_sound = loadSound("exp.mp3");
+  miss_sound = loadSound("aug.mp3");
 }
 
 // Runs once at the start
