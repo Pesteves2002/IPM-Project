@@ -258,9 +258,9 @@ function mousePressed() {
         let previous_target = getTargetBounds(trials[current_trial - 1]);
 
         x1 = previous_target.x;
-        x2 = target.x;
+        x2 = virtual_x;
         y1 = previous_target.y;
-        y2 = target.y;
+        y2 = virtual_y;
 
         distance = Math.sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
         fitts_id = Math.log2(distance / target.w + 1);
