@@ -47,6 +47,13 @@ class Target {
   }
 }
 
+var miss_sound;
+
+function preload() {
+  hit_sound = loadSound("exp.mp3");
+  miss_sound = loadSound("aug.mp3");
+}
+
 // Runs once at the start
 function setup() {
   createCanvas(700, 500); // window size in px before we go into fullScreen()
@@ -56,6 +63,9 @@ function setup() {
 
   textFont("Arial", 18); // font size for the majority of the text
   drawUserIDScreen(); // draws the user start-up screen (student ID and display size)
+
+  hit_sound.setVolume(0.5);
+  miss_sound.setVolume(1);
 }
 
 // Runs every frame and redraws the screen
@@ -70,10 +80,10 @@ function draw() {
         background(color(0, 0, 0)); // sets background to black
         break;
       case HIT_BACKGROUND_COLOUR:
-        background(color(0, 43, 16)); // sets background to green
+        background(color(0, 15, 5)); // sets background to green
         break;
       case MISS_BACKGROUND_COLOUR:
-        background(color(69, 1, 0)); // sets background to red
+        background(color(65, 0, 0)); // sets background to red
         break;
       case STREAK_BACKGROUND_COLOR:
         background(color(189, 120, 0));
@@ -83,6 +93,7 @@ function draw() {
     // Print trial count at the top left-corner of the canvas
     fill(color(255, 255, 255));
     textAlign(LEFT);
+    textFont("Arial", 18); // font size for the majority of the text
     text("Trial " + (current_trial + 1) + " of " + trials.length, 50, 20);
 
     // Draw the virtual cursor
@@ -155,6 +166,30 @@ function printAndSavePerformance() {
   // Print Fitts IDS (one per target, -1 if failed selection, optional)
   //
 
+  text("Fitts Index of Performance", width / 2, 270);
+
+  textAlign(CENTER);
+  for (i = 0; i < trials.length; i++) {
+    let fitts_id;
+    if (fitts_IDs[i] == -1) fitts_id = "MISSED";
+    else fitts_id = fitts_IDs[i].toFixed(3);
+    if (i == 0) fitts_id = "---";
+    let x;
+    if (i < trials.length / 2) {
+      x = width / 3;
+    } else {
+      x = (width * 2) / 3;
+    }
+    let y;
+    if (i < trials.length / 2) {
+      y = 320 + 25 * i;
+    } else {
+      y = 320 + 25 * (i - trials.length / 2);
+    }
+
+    text("Target " + (i + 1) + ": " + fitts_id, x, y);
+  }
+
   // Saves results (DO NOT CHANGE!)
   let attempt_data = {
     project_from: GROUP_NUMBER,
@@ -214,9 +249,29 @@ function mousePressed() {
       if (dist(target.x, target.y, virtual_x, virtual_y) < target.w / 2) {
         hits++;
         background_colour = HIT_BACKGROUND_COLOUR;
+
+        let fitts_id;
+        let distance;
+
+        let x1, x2, y1, y2;
+
+        let previous_target = getTargetBounds(trials[current_trial - 1]);
+
+        x1 = previous_target.x;
+        x2 = virtual_x;
+        y1 = previous_target.y;
+        y2 = virtual_y;
+
+        distance = Math.sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+        fitts_id = Math.log2(distance / target.w + 1);
+        fitts_IDs[current_trial] = fitts_id;
+        if (current_trial == 0) fitts_IDs[current_trial] = -1;
+        hit_sound.play();
       } else {
         misses++;
         background_colour = MISS_BACKGROUND_COLOUR;
+        miss_sound.play();
+        fitts_IDs[current_trial] = -1;
       }
 
       current_trial++; // Move on to the next trial/target
@@ -238,7 +293,7 @@ function mousePressed() {
           height / 2 - continue_button.size().height / 2
         );
       }
-    }
+    } else if (current_trial === 1) testStartTime = millis();
   }
 }
 
@@ -283,6 +338,15 @@ function drawTarget(i, x, y) {
 
   // Draws the target
   circle(target.x, target.y, target.w);
+
+  if (trials[current_trial + 1] === i && trials[current_trial] === i) {
+    fill(color(0, 0, 0));
+    textAlign(CENTER);
+    textFont("Arial", 35); // font size for the majority of the text
+    strokeWeight(2);
+    stroke(0);
+    text("2x", target.x, target.y + 10);
+  }
 }
 
 // Returns the location and size of a given target
@@ -355,6 +419,7 @@ function drawInputArea() {
 
   rect(inputArea.x, inputArea.y, inputArea.w, inputArea.h);
 
+  /*
   let i = trials[current_trial];
 
   let target = getTargetBounds(i);
@@ -369,6 +434,7 @@ function drawInputArea() {
       parseInt(Math.floor(i / 3) * (TARGET_SIZE + TARGET_PADDING) + MARGIN),
     50
   );
+  */
 }
 
 function drawLine(typeOfLine) {
@@ -387,10 +453,10 @@ function drawLine(typeOfLine) {
   }
   if (typeOfLine) {
     strokeWeight(5);
-    stroke(color(0, 0, 255));
+    stroke(color(208, 208, 208));
   } else {
-    stroke(color(0, 207, 200));
     strokeWeight(7);
+    stroke(color(255, 255, 255));
   }
 
   line(
