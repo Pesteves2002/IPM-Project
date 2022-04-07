@@ -47,7 +47,9 @@ class Target {
   }
 }
 
-var miss_sound;
+let miss_sound;
+
+let good_sequence = false;
 
 function preload() {
   hit_sound = loadSound("exp.mp3");
@@ -64,12 +66,33 @@ function setup() {
   textFont("Arial", 18); // font size for the majority of the text
   drawUserIDScreen(); // draws the user start-up screen (student ID and display size)
 
-  hit_sound.setVolume(0.5);
-  miss_sound.setVolume(1);
+  hit_sound.setVolume(0);
+  miss_sound.setVolume(0);
 }
 
+let a = NaN;
 // Runs every frame and redraws the screen
 function draw() {
+  if (!good_sequence) {
+    let first = trials[0];
+    let second = trials[1];
+    a = calculateTotalDistance();
+    console.log(a);
+    if (!isNaN(a)) {
+      let i = 0;
+      while (a > 9500) {
+        trials = [];
+        randomizeTrials();
+        a = calculateTotalDistance();
+        i++;
+      }
+      good_sequence = true;
+      console.log(a, i);
+    }
+    trials[0] = first;
+    trials[1] = second;
+  }
+
   if (draw_targets) {
     // The user is interacting with the 6x3 target grid
     if (hits >= 52) {
@@ -357,7 +380,6 @@ function getTargetBounds(i) {
   var y =
     parseInt(TOP_PADDING) +
     parseInt(Math.floor(i / 3) * (TARGET_SIZE + TARGET_PADDING) + MARGIN);
-
   return new Target(x, y, TARGET_SIZE);
 }
 
@@ -464,5 +486,21 @@ function drawLine(typeOfLine) {
     previous_target.y,
     current_target.x,
     current_target.y
+  );
+}
+
+function calculateTotalDistance() {
+  let sum = 0;
+
+  for (i = 0; i < trials.length - 1; i++) {
+    let target1 = getTargetBounds(trials[i]);
+    let target2 = getTargetBounds(trials[i + 1]);
+    sum += calculateDistance(target1, target2);
+  }
+  return sum;
+}
+function calculateDistance(point1, point2) {
+  return Math.sqrt(
+    Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2)
   );
 }
