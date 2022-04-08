@@ -57,6 +57,8 @@ function preload() {
   hit_sound2 = loadSound("orange.m4r");
   miss_sound1 = loadSound("miss1.mp3");
   miss_sound2 = loadSound("miss2.mp3");
+
+  img = loadImage("ch.png");
 }
 
 // Runs once at the start
@@ -120,7 +122,9 @@ function draw() {
     drawInputArea();
 
     fill(color(255, 255, 255));
-    circle(x, y, 0.5 * PPCM);
+    // circle(x, y, 0.5 * PPCM);
+    imageMode(CENTER);
+    image(img, x, y);
   }
 }
 
