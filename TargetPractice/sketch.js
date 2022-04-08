@@ -57,12 +57,15 @@ function preload() {
   hit_sound2 = loadSound("orange.m4r");
   miss_sound1 = loadSound("miss1.mp3");
   miss_sound2 = loadSound("miss2.mp3");
-
+  music = loadSound("music.mp3");
   img = loadImage("ch.png");
 }
 
 // Runs once at the start
 function setup() {
+  music.setVolume(0.5);
+  music.play();
+
   createCanvas(700, 500); // window size in px before we go into fullScreen()
   frameRate(60); // frame rate (DO NOT CHANGE!)
 
@@ -80,6 +83,7 @@ function setup() {
 // Runs every frame and redraws the screen
 function draw() {
   if (draw_targets) {
+    music.stop();
     // The user is interacting with the 6x3 target grid
     if (hits >= 52) {
       background_colour = STREAK_BACKGROUND_COLOR;
@@ -308,6 +312,7 @@ function mousePressed() {
       draw_targets = false; // Stop showing targets and the user performance results
       printAndSavePerformance(); // Print the user's results on-screen and send these to the DB
       attempt++;
+      music.play();
 
       // If there's an attempt to go create a button to start this
       if (attempt < 2) {
