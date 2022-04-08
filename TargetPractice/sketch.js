@@ -49,9 +49,14 @@ class Target {
 
 var miss_sound;
 
+var hit_turn = 0;
+var miss_turn = 0;
+
 function preload() {
-  hit_sound = loadSound("exp.mp3");
-  miss_sound = loadSound("aug.mp3");
+  hit_sound1 = loadSound("blue.m4r");
+  hit_sound2 = loadSound("orange.m4r");
+  miss_sound1 = loadSound("miss1.mp3");
+  miss_sound2 = loadSound("miss2.mp3");
 }
 
 // Runs once at the start
@@ -64,8 +69,10 @@ function setup() {
   textFont("Arial", 18); // font size for the majority of the text
   drawUserIDScreen(); // draws the user start-up screen (student ID and display size)
 
-  hit_sound.setVolume(0.5);
-  miss_sound.setVolume(1);
+  hit_sound1.setVolume(1);
+  hit_sound2.setVolume(1);
+  miss_sound1.setVolume(1);
+  miss_sound2.setVolume(1);
 }
 
 // Runs every frame and redraws the screen
@@ -266,11 +273,25 @@ function mousePressed() {
         fitts_id = Math.log2(distance / target.w + 1);
         fitts_IDs[current_trial] = fitts_id;
         if (current_trial == 0) fitts_IDs[current_trial] = -1;
-        hit_sound.play();
+        {
+          if (!hit_turn) {
+            hit_sound1.play();
+            hit_turn = 1;
+          } else {
+            hit_sound2.play();
+            hit_turn = 0;
+          }
+        }
       } else {
         misses++;
         background_colour = MISS_BACKGROUND_COLOUR;
-        miss_sound.play();
+        if (!miss_turn) {
+          miss_sound1.play();
+          miss_turn = 1;
+        } else {
+          miss_sound2.play();
+          miss_turn = 0;
+        }
         fitts_IDs[current_trial] = -1;
       }
 
