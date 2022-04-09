@@ -466,3 +466,33 @@ function drawLine(typeOfLine) {
     current_target.y
   );
 }
+
+function drawInstructions() {
+  // Draw instructions above input area
+  let startY = inputArea.y - TARGET_SIZE * 1.5;
+
+  fill(color(0, 255, 0));
+  stroke(color(255, 192, 84));
+  strokeWeight(4)
+  circle(inputArea.x + TARGET_SIZE * 0.5, startY, TARGET_SIZE);
+  fill(color(255, 255, 255));
+  noStroke();
+  text('Target', inputArea.x + TARGET_SIZE * 1.7, startY);
+
+  fill(color(0, 115, 27));
+  noStroke();
+  circle(inputArea.x + inputArea.w / 2 + TARGET_SIZE * 0.5, startY, TARGET_SIZE);
+  text('Next target', inputArea.x + inputArea.w / 2 + TARGET_SIZE * 1.7, startY);
+
+  startY -= TARGET_SIZE * 1.5;
+
+  fill(color(255, 192, 84));
+  stroke(color(255, 192, 84));
+  strokeWeight(10);
+  circle(inputArea.x + TARGET_SIZE * 0.5, startY, TARGET_SIZE);
+  fill(color(255, 255, 255));
+  noStroke();
+  text('Click twice', inputArea.x + TARGET_SIZE * 1.7, startY);
+
+  startY -= TARGET_SIZE * 1.5;
+}
