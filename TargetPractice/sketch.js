@@ -64,8 +64,8 @@ function setup() {
   textFont("Arial", 18); // font size for the majority of the text
   drawUserIDScreen(); // draws the user start-up screen (student ID and display size)
 
-  hit_sound.setVolume(0.5);
-  miss_sound.setVolume(1);
+  hit_sound.setVolume(0);
+  miss_sound.setVolume(0);
 }
 
 // Runs every frame and redraws the screen
@@ -114,6 +114,8 @@ function draw() {
 
     fill(color(255, 255, 255));
     circle(x, y, 0.5 * PPCM);
+
+    drawInstructions();
   }
 }
 
@@ -346,6 +348,7 @@ function drawTarget(i, x, y) {
     strokeWeight(2);
     stroke(0);
     text("2x", target.x, target.y + 10);
+    textAlign(LEFT);
   }
 }
 
@@ -470,19 +473,31 @@ function drawLine(typeOfLine) {
 function drawInstructions() {
   // Draw instructions above input area
   let startY = inputArea.y - TARGET_SIZE * 1.5;
+  textFont("Arial", 18); // font size for the majority of the text
 
   fill(color(0, 255, 0));
   stroke(color(255, 192, 84));
-  strokeWeight(4)
+  strokeWeight(4);
   circle(inputArea.x + TARGET_SIZE * 0.5, startY, TARGET_SIZE);
   fill(color(255, 255, 255));
   noStroke();
-  text('Target', inputArea.x + TARGET_SIZE * 1.7, startY);
+  text("Target", inputArea.x + TARGET_SIZE * 1.7, startY);
 
   fill(color(0, 115, 27));
   noStroke();
-  circle(inputArea.x + inputArea.w / 2 + TARGET_SIZE * 0.5, startY, TARGET_SIZE);
-  text('Next target', inputArea.x + inputArea.w / 2 + TARGET_SIZE * 1.7, startY);
+  circle(
+    inputArea.x + inputArea.w / 2 + TARGET_SIZE * 0.5,
+    startY,
+    TARGET_SIZE
+  );
+
+  fill(color(255, 255, 255));
+  noStroke();
+  text(
+    "Next target",
+    inputArea.x + inputArea.w / 2 + TARGET_SIZE * 1.7,
+    startY
+  );
 
   startY -= TARGET_SIZE * 1.5;
 
@@ -492,7 +507,14 @@ function drawInstructions() {
   circle(inputArea.x + TARGET_SIZE * 0.5, startY, TARGET_SIZE);
   fill(color(255, 255, 255));
   noStroke();
-  text('Click twice', inputArea.x + TARGET_SIZE * 1.7, startY);
+  text("Click twice", inputArea.x + TARGET_SIZE * 1.7, startY);
+
+  fill(color(0, 0, 0));
+  textAlign(CENTER);
+  textFont("Arial", 35); // font size for the majority of the text
+  strokeWeight(2);
+  stroke(0);
+  text("2x", inputArea.x + TARGET_SIZE * 0.5, startY + 10);
 
   startY -= TARGET_SIZE * 1.5;
 }
