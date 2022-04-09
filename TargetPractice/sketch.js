@@ -112,10 +112,10 @@ function draw() {
     // Draw the user input area
     drawInputArea();
 
+    drawInstructions();
+
     fill(color(255, 255, 255));
     circle(x, y, 0.5 * PPCM);
-
-    drawInstructions();
   }
 }
 
@@ -472,12 +472,12 @@ function drawLine(typeOfLine) {
 
 function drawInstructions() {
   // Draw instructions above input area
-  let startY = inputArea.y - TARGET_SIZE * 1.5;
+  let startY = inputArea.y - TARGET_SIZE * 1;
   textFont("Arial", 18); // font size for the majority of the text
 
   fill(color(0, 255, 0));
   stroke(color(255, 192, 84));
-  strokeWeight(4);
+  strokeWeight(7);
   circle(inputArea.x + TARGET_SIZE * 0.5, startY, TARGET_SIZE);
   fill(color(255, 255, 255));
   noStroke();
@@ -494,7 +494,7 @@ function drawInstructions() {
   fill(color(255, 255, 255));
   noStroke();
   text(
-    "Next target",
+    "Next Target",
     inputArea.x + inputArea.w / 2 + TARGET_SIZE * 1.7,
     startY
   );
@@ -507,7 +507,7 @@ function drawInstructions() {
   circle(inputArea.x + TARGET_SIZE * 0.5, startY, TARGET_SIZE);
   fill(color(255, 255, 255));
   noStroke();
-  text("Click twice", inputArea.x + TARGET_SIZE * 1.7, startY);
+  text("Click Twice", inputArea.x + TARGET_SIZE * 1.7, startY);
 
   fill(color(0, 0, 0));
   textAlign(CENTER);
@@ -516,5 +516,48 @@ function drawInstructions() {
   stroke(0);
   text("2x", inputArea.x + TARGET_SIZE * 0.5, startY + 10);
 
-  startY -= TARGET_SIZE * 1.5;
+  startY -= TARGET_SIZE * 3.5;
+
+  stroke(color(220, 220, 220));
+  strokeWeight(5);
+  fill(color(0, 15, 5));
+  rect(inputArea.x, startY, TARGET_SIZE * 2.5, TARGET_SIZE * 2.5);
+  fill(color(65, 0, 0));
+  rect(
+    inputArea.x + inputArea.w / 3,
+    startY,
+    TARGET_SIZE * 2.5,
+    TARGET_SIZE * 2.5
+  );
+  fill(color(189, 120, 0));
+  rect(
+    inputArea.x + (inputArea.w * 2) / 3,
+    startY,
+    TARGET_SIZE * 2.5,
+    TARGET_SIZE * 2.5
+  );
+  fill(color(255, 255, 255));
+  textAlign(LEFT);
+  textFont("Arial", 35); // font size for the majority of the text
+  strokeWeight(2);
+  stroke(0);
+  text(
+    "HIT",
+    inputArea.x + (TARGET_SIZE * 2) / 3,
+    startY + (TARGET_SIZE * 6) / 4
+  );
+  text(
+    "MISS",
+    inputArea.x + inputArea.w / 3 + TARGET_SIZE / 2,
+    startY + (TARGET_SIZE * 6) / 4
+  );
+  text("NEVER", inputArea.x + inputArea.w * 0.68, startY + TARGET_SIZE);
+  text(
+    "MISS",
+    inputArea.x + inputArea.w * 0.72,
+    startY + (TARGET_SIZE * 8) / 4
+  );
+
+  startY -= TARGET_SIZE / 2;
+  text("Backgrounds:", inputArea.x, startY);
 }
