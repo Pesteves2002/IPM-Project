@@ -551,11 +551,14 @@ function drawInstructions() {
     inputArea.x + inputArea.w / 3 + TARGET_SIZE / 2,
     startY + (TARGET_SIZE * 6) / 4
   );
-  text("NEVER", inputArea.x + inputArea.w * 0.68, startY + TARGET_SIZE);
+
+  textFont("Arial", 30); // font size for the majority of the text
+
+  text("Accuracy", inputArea.x + inputArea.w * 0.68, startY + TARGET_SIZE);
   text(
-    "MISS",
+    ">95%",
     inputArea.x + inputArea.w * 0.72,
-    startY + (TARGET_SIZE * 8) / 4
+    startY + (TARGET_SIZE * 7) / 4
   );
 
   startY -= TARGET_SIZE / 2;
