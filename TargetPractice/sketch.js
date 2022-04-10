@@ -170,7 +170,6 @@ function printAndSavePerformance() {
 
   text("Fitts Index of Performance", width / 2, 270);
 
-  textAlign(CENTER);
   for (i = 0; i < trials.length; i++) {
     let fitts_id;
     if (fitts_IDs[i] == -1) fitts_id = "MISSED";
@@ -509,6 +508,24 @@ function drawInstructions() {
   noStroke();
   text("Click Twice", inputArea.x + TARGET_SIZE * 1.7, startY);
 
+  fill(color(155, 155, 155));
+
+  stroke(color(255, 0, 0));
+  strokeWeight(7);
+  circle(
+    inputArea.x + inputArea.w / 2 + TARGET_SIZE * 0.5,
+    startY,
+    TARGET_SIZE
+  );
+
+  fill(color(255, 255, 255));
+  noStroke();
+  text(
+    "Circle Selected",
+    inputArea.x + inputArea.w / 2 + TARGET_SIZE * 1.7,
+    startY
+  );
+
   fill(color(0, 0, 0));
   textAlign(CENTER);
   textFont("Arial", 35); // font size for the majority of the text
@@ -563,4 +580,6 @@ function drawInstructions() {
 
   startY -= TARGET_SIZE / 2;
   text("Backgrounds:", inputArea.x, startY);
+
+  textFont("Arial", 18); // font size for the majority of the text
 }
