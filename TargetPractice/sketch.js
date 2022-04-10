@@ -29,7 +29,7 @@ let current_trial = 0; // the current trial number (indexes into trials array ab
 let attempt = 0; // users complete each test twice to account for practice (attemps 0 and 1)
 let fitts_IDs = []; // add the Fitts ID for each selection here (-1 when there is a miss)
 
-// Backgruound colours
+// Background colours
 
 const HIT_BACKGROUND_COLOUR = 0;
 const MISS_BACKGROUND_COLOUR = 1;
