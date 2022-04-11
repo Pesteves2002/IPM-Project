@@ -68,6 +68,8 @@ function setup() {
   miss_sound.setVolume(0);
 }
 
+let dist_targets = 0;
+
 // Runs every frame and redraws the screen
 function draw() {
   if (draw_targets) {
@@ -101,6 +103,13 @@ function draw() {
     let y = map(mouseY, inputArea.y, inputArea.y + inputArea.h, 0, height);
 
     drawLine(1);
+
+    dist_targets = dist(
+      getTargetBounds(1).x,
+      getTargetBounds(1).y,
+      getTargetBounds(2).x,
+      getTargetBounds(2).y
+    );
 
     // Draw all 18 targets
     for (var i = 0; i < 18; i++) {
@@ -302,6 +311,29 @@ function mousePressed() {
 function drawTarget(i, x, y) {
   // Get the location and size for target (i)
   let target = getTargetBounds(i);
+
+  console.log(dist_targets);
+  switch (background_colour) {
+    case DEFAULT_BACKGROUND_COLOR:
+      fill(color(0, 0, 0)); // sets background to black
+      break;
+    case HIT_BACKGROUND_COLOUR:
+      fill(color(0, 15, 5)); // sets background to green
+      break;
+    case MISS_BACKGROUND_COLOUR:
+      fill(color(65, 0, 0)); // sets background to red
+      break;
+    case STREAK_BACKGROUND_COLOR:
+      fill(color(189, 120, 0));
+      break;
+  }
+  // Draw rectangle
+  strokeWeight(3);
+  stroke(color(255, 255, 255));
+  rectMode(CENTER);
+
+  rect(target.x, target.y, dist_targets, dist_targets);
+  rectMode(CORNER);
 
   if (trials[current_trial + 1] === i && trials[current_trial] === i) {
     fill(color(255, 192, 84));
