@@ -29,7 +29,7 @@ let current_trial = 0; // the current trial number (indexes into trials array ab
 let attempt = 0; // users complete each test twice to account for practice (attemps 0 and 1)
 let fitts_IDs = []; // add the Fitts ID for each selection here (-1 when there is a miss)
 
-// Backgruound colours
+// Background colours
 
 const HIT_BACKGROUND_COLOUR = 0;
 const MISS_BACKGROUND_COLOUR = 1;
@@ -64,8 +64,8 @@ function setup() {
   textFont("Arial", 18); // font size for the majority of the text
   drawUserIDScreen(); // draws the user start-up screen (student ID and display size)
 
-  hit_sound.setVolume(0.5);
-  miss_sound.setVolume(1);
+  hit_sound.setVolume(0);
+  miss_sound.setVolume(0);
 }
 
 // Runs every frame and redraws the screen
@@ -111,6 +111,8 @@ function draw() {
 
     // Draw the user input area
     drawInputArea();
+
+    drawInstructions();
 
     fill(color(255, 255, 255));
     circle(x, y, 0.5 * PPCM);
@@ -168,7 +170,6 @@ function printAndSavePerformance() {
 
   text("Fitts Index of Performance", width / 2, 270);
 
-  textAlign(CENTER);
   for (i = 0; i < trials.length; i++) {
     let fitts_id;
     if (fitts_IDs[i] == -1) fitts_id = "MISSED";
@@ -346,6 +347,7 @@ function drawTarget(i, x, y) {
     strokeWeight(2);
     stroke(0);
     text("2x", target.x, target.y + 10);
+    textAlign(LEFT);
   }
 }
 
@@ -465,4 +467,119 @@ function drawLine(typeOfLine) {
     current_target.x,
     current_target.y
   );
+}
+
+function drawInstructions() {
+  // Draw instructions above input area
+  let startY = inputArea.y - TARGET_SIZE * 1;
+  textFont("Arial", 18); // font size for the majority of the text
+
+  fill(color(0, 255, 0));
+  stroke(color(255, 192, 84));
+  strokeWeight(7);
+  circle(inputArea.x + TARGET_SIZE * 0.5, startY, TARGET_SIZE);
+  fill(color(255, 255, 255));
+  noStroke();
+  text("Target", inputArea.x + TARGET_SIZE * 1.7, startY);
+
+  fill(color(0, 115, 27));
+  noStroke();
+  circle(
+    inputArea.x + inputArea.w / 2 + TARGET_SIZE * 0.5,
+    startY,
+    TARGET_SIZE
+  );
+
+  fill(color(255, 255, 255));
+  noStroke();
+  text(
+    "Next Target",
+    inputArea.x + inputArea.w / 2 + TARGET_SIZE * 1.7,
+    startY
+  );
+
+  startY -= TARGET_SIZE * 1.5;
+
+  fill(color(255, 192, 84));
+  stroke(color(255, 192, 84));
+  strokeWeight(10);
+  circle(inputArea.x + TARGET_SIZE * 0.5, startY, TARGET_SIZE);
+  fill(color(255, 255, 255));
+  noStroke();
+  text("Click Twice", inputArea.x + TARGET_SIZE * 1.7, startY);
+
+  fill(color(155, 155, 155));
+
+  stroke(color(255, 0, 0));
+  strokeWeight(7);
+  circle(
+    inputArea.x + inputArea.w / 2 + TARGET_SIZE * 0.5,
+    startY,
+    TARGET_SIZE
+  );
+
+  fill(color(255, 255, 255));
+  noStroke();
+  text(
+    "Circle Selected",
+    inputArea.x + inputArea.w / 2 + TARGET_SIZE * 1.7,
+    startY
+  );
+
+  fill(color(0, 0, 0));
+  textAlign(CENTER);
+  textFont("Arial", 35); // font size for the majority of the text
+  strokeWeight(2);
+  stroke(0);
+  text("2x", inputArea.x + TARGET_SIZE * 0.5, startY + 10);
+
+  startY -= TARGET_SIZE * 3.5;
+
+  stroke(color(220, 220, 220));
+  strokeWeight(5);
+  fill(color(0, 15, 5));
+  rect(inputArea.x, startY, TARGET_SIZE * 2.5, TARGET_SIZE * 2.5);
+  fill(color(65, 0, 0));
+  rect(
+    inputArea.x + inputArea.w / 3,
+    startY,
+    TARGET_SIZE * 2.5,
+    TARGET_SIZE * 2.5
+  );
+  fill(color(189, 120, 0));
+  rect(
+    inputArea.x + (inputArea.w * 2) / 3,
+    startY,
+    TARGET_SIZE * 2.5,
+    TARGET_SIZE * 2.5
+  );
+  fill(color(255, 255, 255));
+  textAlign(LEFT);
+  textFont("Arial", 35); // font size for the majority of the text
+  strokeWeight(2);
+  stroke(0);
+  text(
+    "HIT",
+    inputArea.x + (TARGET_SIZE * 2) / 3,
+    startY + (TARGET_SIZE * 6) / 4
+  );
+  text(
+    "MISS",
+    inputArea.x + inputArea.w / 3 + TARGET_SIZE / 2,
+    startY + (TARGET_SIZE * 6) / 4
+  );
+
+  textFont("Arial", 30); // font size for the majority of the text
+
+  text("Accuracy", inputArea.x + inputArea.w * 0.68, startY + TARGET_SIZE);
+  text(
+    ">95%",
+    inputArea.x + inputArea.w * 0.72,
+    startY + (TARGET_SIZE * 7) / 4
+  );
+
+  startY -= TARGET_SIZE / 2;
+  text("Backgrounds:", inputArea.x, startY);
+
+  textFont("Arial", 18); // font size for the majority of the text
 }
