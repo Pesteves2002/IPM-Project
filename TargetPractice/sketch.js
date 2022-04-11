@@ -50,8 +50,8 @@ class Target {
 var miss_sound;
 
 function preload() {
-  hit_sound = loadSound("exp.mp3");
-  miss_sound = loadSound("aug.mp3");
+  hit_sound = loadSound("pop.mp3");
+  miss_sound = loadSound("miss.mp3");
 }
 
 // Runs once at the start
@@ -64,8 +64,8 @@ function setup() {
   textFont("Arial", 18); // font size for the majority of the text
   drawUserIDScreen(); // draws the user start-up screen (student ID and display size)
 
-  hit_sound.setVolume(0);
-  miss_sound.setVolume(0);
+  hit_sound.setVolume(1);
+  miss_sound.setVolume(1);
 }
 
 let dist_targets = 0;
