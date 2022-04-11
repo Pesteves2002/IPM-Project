@@ -38,6 +38,11 @@ const STREAK_BACKGROUND_COLOR = 3;
 
 let background_colour = DEFAULT_BACKGROUND_COLOR;
 
+// Sound variables
+
+let hit_sound;
+let miss_sound;
+
 // Target class (position and width)
 class Target {
   constructor(x, y, w) {
@@ -46,8 +51,6 @@ class Target {
     this.w = w;
   }
 }
-
-var miss_sound;
 
 function preload() {
   hit_sound = loadSound("pop.mp3");
@@ -107,8 +110,10 @@ function draw() {
     // Draw the user input area
     drawInputArea();
 
+    // Draw the line from current to next
     drawLine(1);
 
+    // Calculate the shortest distance between two targets
     dist_targets = dist(
       getTargetBounds(1).x,
       getTargetBounds(1).y,
@@ -126,10 +131,14 @@ function draw() {
     if (counter === 18) {
       cursor_on_rectangle = false;
     }
+
+    // Draws the line from previous to curren
     drawLine(0);
 
+    // Draw the instructions
     drawInstructions();
 
+    // Draw fake cursor
     fill(color(255, 255, 255));
     circle(x, y, 0.5 * PPCM);
   }
