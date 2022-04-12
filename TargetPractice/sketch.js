@@ -586,9 +586,7 @@ function calculateTotalDistance() {
 }
 function calculateDistance(point1, point2) {
   if (isNaN(point1.x)) return -1;
-  return Math.sqrt(
-    Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2)
-  );
+  return dist(point1.x, point1.y, point1.y, point2.y);
 }
 
 function drawInstructions() {
