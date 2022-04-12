@@ -67,8 +67,8 @@ function setup() {
   textFont("Arial", 18); // font size for the majority of the text
   drawUserIDScreen(); // draws the user start-up screen (student ID and display size)
 
-  hit_sound.setVolume(1);
-  miss_sound.setVolume(1);
+  hit_sound.setVolume(0.2);
+  miss_sound.setVolume(0.2);
 }
 
 let dist_targets = 0;
