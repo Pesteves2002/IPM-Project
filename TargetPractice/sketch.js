@@ -29,7 +29,7 @@ let current_trial = 0; // the current trial number (indexes into trials array ab
 let attempt = 0; // users complete each test twice to account for practice (attemps 0 and 1)
 let fitts_IDs = []; // add the Fitts ID for each selection here (-1 when there is a miss)
 
-// Backgruound colours
+// Background colours
 
 const HIT_BACKGROUND_COLOUR = 0;
 const MISS_BACKGROUND_COLOUR = 1;
@@ -37,6 +37,11 @@ const DEFAULT_BACKGROUND_COLOR = 2;
 const STREAK_BACKGROUND_COLOR = 3;
 
 let background_colour = DEFAULT_BACKGROUND_COLOR;
+
+// Sound variables
+
+let hit_sound;
+let miss_sound;
 
 // Target class (position and width)
 class Target {
@@ -47,13 +52,9 @@ class Target {
   }
 }
 
-let miss_sound;
-
-let good_sequence = false;
-
 function preload() {
-  hit_sound = loadSound("exp.mp3");
-  miss_sound = loadSound("aug.mp3");
+  hit_sound = loadSound("pop.mp3");
+  miss_sound = loadSound("miss.mp3");
 }
 
 // Runs once at the start
@@ -66,11 +67,15 @@ function setup() {
   textFont("Arial", 18); // font size for the majority of the text
   drawUserIDScreen(); // draws the user start-up screen (student ID and display size)
 
-  hit_sound.setVolume(0);
-  miss_sound.setVolume(0);
+  hit_sound.setVolume(1);
+  miss_sound.setVolume(1);
 }
 
-let a = 1000000;
+let dist_targets = 0;
+let cursor_on_rectangle = false;
+let counter = 0;
+let good_sequence = false;
+
 // Runs every frame and redraws the screen
 function draw() {
   if (!good_sequence) {
@@ -137,18 +142,38 @@ function draw() {
     let x = map(mouseX, inputArea.x, inputArea.x + inputArea.w, 0, width);
     let y = map(mouseY, inputArea.y, inputArea.y + inputArea.h, 0, height);
 
+    // Draw the user input area
+    drawInputArea();
+
+    // Draw the line from current to next
     drawLine(1);
+
+    // Calculate the shortest distance between two targets
+    dist_targets = dist(
+      getTargetBounds(1).x,
+      getTargetBounds(1).y,
+      getTargetBounds(2).x,
+      getTargetBounds(2).y
+    );
+
+    counter = 0;
 
     // Draw all 18 targets
     for (var i = 0; i < 18; i++) {
       drawTarget(i, x, y);
     }
 
+    if (counter === 18) {
+      cursor_on_rectangle = false;
+    }
+
+    // Draws the line from previous to curren
     drawLine(0);
 
-    // Draw the user input area
-    drawInputArea();
+    // Draw the instructions
+    drawInstructions();
 
+    // Draw fake cursor
     fill(color(255, 255, 255));
     circle(x, y, 0.5 * PPCM);
   }
@@ -205,7 +230,6 @@ function printAndSavePerformance() {
 
   text("Fitts Index of Performance", width / 2, 270);
 
-  textAlign(CENTER);
   for (i = 0; i < trials.length; i++) {
     let fitts_id;
     if (fitts_IDs[i] == -1) fitts_id = "MISSED";
@@ -283,7 +307,7 @@ function mousePressed() {
         height
       );
 
-      if (dist(target.x, target.y, virtual_x, virtual_y) < target.w / 2) {
+      if (dist(target.x, target.y, hit_x, hit_y) < target.w / 2) {
         hits++;
         background_colour = HIT_BACKGROUND_COLOUR;
 
@@ -295,9 +319,9 @@ function mousePressed() {
         let previous_target = getTargetBounds(trials[current_trial - 1]);
 
         x1 = previous_target.x;
-        x2 = virtual_x;
+        x2 = hit_x;
         y1 = previous_target.y;
-        y2 = virtual_y;
+        y2 = hit_y;
 
         distance = Math.sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
         fitts_id = Math.log2(distance / target.w + 1);
@@ -338,6 +362,15 @@ function mousePressed() {
 function drawTarget(i, x, y) {
   // Get the location and size for target (i)
   let target = getTargetBounds(i);
+
+  noFill();
+  // Draw rectangle
+  strokeWeight(3);
+  stroke(color(255, 255, 255));
+  rectMode(CENTER);
+
+  rect(target.x, target.y, dist_targets, dist_targets);
+  rectMode(CORNER);
 
   if (trials[current_trial + 1] === i && trials[current_trial] === i) {
     fill(color(255, 192, 84));
@@ -383,6 +416,40 @@ function drawTarget(i, x, y) {
     strokeWeight(2);
     stroke(0);
     text("2x", target.x, target.y + 10);
+    textAlign(LEFT);
+    fill(color(255, 192, 84));
+  }
+
+  let inputTargetX = map(
+    target.x,
+    0,
+    width,
+    inputArea.x,
+    inputArea.x + inputArea.w
+  );
+  let inputTargetY = map(
+    target.y,
+    0,
+    height,
+    inputArea.y,
+    inputArea.y + inputArea.h
+  );
+
+  // Draw rectangle
+  strokeWeight(3);
+  stroke(color(255, 255, 255));
+  rectMode(CENTER);
+
+  rect(
+    inputTargetX,
+    inputTargetY,
+    target.w * (inputArea.w / height),
+    target.w * (inputArea.w / height)
+  );
+  rectMode(CORNER);
+
+  if (!insideRect(i)) {
+    counter++;
   }
 }
 
@@ -518,4 +585,150 @@ function calculateDistance(point1, point2) {
   return Math.sqrt(
     Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2)
   );
+}
+
+function drawInstructions() {
+  // Draw instructions above input area
+  let startY = inputArea.y - TARGET_SIZE * 1;
+  textFont("Arial", 18); // font size for the majority of the text
+
+  fill(color(0, 255, 0));
+  stroke(color(255, 192, 84));
+  strokeWeight(7);
+  circle(inputArea.x + TARGET_SIZE * 0.5, startY, TARGET_SIZE);
+  fill(color(255, 255, 255));
+  noStroke();
+  text("Target", inputArea.x + TARGET_SIZE * 1.7, startY);
+
+  fill(color(0, 115, 27));
+  noStroke();
+  circle(
+    inputArea.x + inputArea.w / 2 + TARGET_SIZE * 0.5,
+    startY,
+    TARGET_SIZE
+  );
+
+  fill(color(255, 255, 255));
+  noStroke();
+  text(
+    "Next Target",
+    inputArea.x + inputArea.w / 2 + TARGET_SIZE * 1.7,
+    startY
+  );
+
+  startY -= TARGET_SIZE * 1.5;
+
+  fill(color(255, 192, 84));
+  stroke(color(255, 192, 84));
+  strokeWeight(10);
+  circle(inputArea.x + TARGET_SIZE * 0.5, startY, TARGET_SIZE);
+  fill(color(255, 255, 255));
+  noStroke();
+  text("Click Twice", inputArea.x + TARGET_SIZE * 1.7, startY);
+
+  fill(color(155, 155, 155));
+
+  stroke(color(255, 0, 0));
+  strokeWeight(7);
+  circle(
+    inputArea.x + inputArea.w / 2 + TARGET_SIZE * 0.5,
+    startY,
+    TARGET_SIZE
+  );
+
+  fill(color(255, 255, 255));
+  noStroke();
+  text(
+    "Circle Selected",
+    inputArea.x + inputArea.w / 2 + TARGET_SIZE * 1.7,
+    startY
+  );
+
+  fill(color(0, 0, 0));
+  textAlign(CENTER);
+  textFont("Arial", 35); // font size for the majority of the text
+  strokeWeight(2);
+  stroke(0);
+  text("2x", inputArea.x + TARGET_SIZE * 0.5, startY + 10);
+
+  startY -= TARGET_SIZE * 3.5;
+
+  stroke(color(220, 220, 220));
+  strokeWeight(5);
+  fill(color(0, 15, 5));
+  rect(inputArea.x, startY, TARGET_SIZE * 2.5, TARGET_SIZE * 2.5);
+  fill(color(65, 0, 0));
+  rect(
+    inputArea.x + inputArea.w / 3,
+    startY,
+    TARGET_SIZE * 2.5,
+    TARGET_SIZE * 2.5
+  );
+  fill(color(189, 120, 0));
+  rect(
+    inputArea.x + (inputArea.w * 2) / 3,
+    startY,
+    TARGET_SIZE * 2.5,
+    TARGET_SIZE * 2.5
+  );
+  fill(color(255, 255, 255));
+  textAlign(LEFT);
+  textFont("Arial", 35); // font size for the majority of the text
+  strokeWeight(2);
+  stroke(0);
+  text(
+    "HIT",
+    inputArea.x + (TARGET_SIZE * 2) / 3,
+    startY + (TARGET_SIZE * 6) / 4
+  );
+  text(
+    "MISS",
+    inputArea.x + inputArea.w / 3 + TARGET_SIZE / 2,
+    startY + (TARGET_SIZE * 6) / 4
+  );
+
+  textFont("Arial", 30); // font size for the majority of the text
+
+  text("Accuracy", inputArea.x + inputArea.w * 0.68, startY + TARGET_SIZE);
+  text(
+    ">95%",
+    inputArea.x + inputArea.w * 0.72,
+    startY + (TARGET_SIZE * 7) / 4
+  );
+
+  startY -= TARGET_SIZE / 2;
+  text("Backgrounds:", inputArea.x, startY);
+
+  textFont("Arial", 18); // font size for the majority of the text
+}
+
+let hit_x;
+let hit_y;
+
+function insideRect(i) {
+  let target = getTargetBounds(i);
+  let official_x;
+  let official_y;
+
+  official_x = map(mouseX, inputArea.x, inputArea.x + inputArea.w, 0, width);
+  official_y = map(mouseY, inputArea.y, inputArea.y + inputArea.h, 0, height);
+
+  if (
+    target.x - dist_targets / 2 < official_x &&
+    official_x < target.x + dist_targets / 2
+  ) {
+    if (
+      target.y - dist_targets / 2 < official_y &&
+      official_y < target.y + dist_targets / 2
+    ) {
+      hit_x = target.x;
+      hit_y = target.y;
+      console.log(official_x, official_y);
+      fill(color(255, 255, 255));
+      circle(target.x, target.y, 0.5 * PPCM);
+      cursor_on_rectangle = true;
+      return true;
+    }
+  }
+  return false;
 }
