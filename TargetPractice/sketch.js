@@ -70,24 +70,38 @@ function setup() {
   miss_sound.setVolume(0);
 }
 
-let a = NaN;
+let a = 1000000;
 // Runs every frame and redraws the screen
 function draw() {
   if (!good_sequence) {
     let first = trials[0];
     let second = trials[1];
     a = calculateTotalDistance();
-    console.log(a);
-    if (!isNaN(a)) {
+    if (a < 0) a = 1000000;
+    if (a !== 1000000) {
+      let original_distance = a;
       let i = 0;
-      while (a > 9500) {
+      let best = a;
+      let best_trial = [];
+      while (i < 100000) {
         trials = [];
         randomizeTrials();
         a = calculateTotalDistance();
+        if (a < best) {
+          best = a;
+          best_trial = trials.map((x) => x);
+        }
         i++;
       }
+      console.log(best_trial);
+      trials = best_trial.map((x) => x);
+      console.log(trials);
+      console.log("primeiro");
+      console.log(original_distance);
+      a = calculateTotalDistance();
+      console.log("segundo");
+      console.log(a);
       good_sequence = true;
-      console.log(a, i);
     }
     trials[0] = first;
     trials[1] = second;
@@ -500,6 +514,7 @@ function calculateTotalDistance() {
   return sum;
 }
 function calculateDistance(point1, point2) {
+  if (isNaN(point1.x)) return -1;
   return Math.sqrt(
     Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2)
   );
