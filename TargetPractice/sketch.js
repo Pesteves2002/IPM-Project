@@ -477,6 +477,7 @@ function continueTest() {
   fitts_IDs = [];
 
   continue_button.remove();
+  good_sequence = false;
 
   // Shows the targets again
   draw_targets = true;
@@ -726,7 +727,6 @@ function insideRect(i) {
     ) {
       hit_x = target.x;
       hit_y = target.y;
-      console.log(official_x, official_y);
       fill(color(255, 255, 255));
       circle(target.x, target.y, 0.5 * PPCM);
       cursor_on_rectangle = true;
