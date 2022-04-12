@@ -366,7 +366,7 @@ function drawTarget(i, x, y) {
     }
   }
 
-  if (dist(target.x, target.y, x, y) < target.w / 2) {
+  if (dist(target.x, target.y, hit_x, hit_y) < target.w / 2) {
     stroke(color(255, 0, 0));
     strokeWeight(7);
   }
@@ -487,23 +487,6 @@ function drawInputArea() {
   strokeWeight(2);
 
   rect(inputArea.x, inputArea.y, inputArea.w, inputArea.h);
-
-  /*
-  let i = trials[current_trial];
-
-  let target = getTargetBounds(i);
-
-  fill(color(255, 0, 0));
-  circle(
-    target.x -
-      parseInt(LEFT_PADDING) +
-      parseInt((i % 3) * (TARGET_SIZE + TARGET_PADDING) + MARGIN),
-    target.y -
-      parseInt(TOP_PADDING) +
-      parseInt(Math.floor(i / 3) * (TARGET_SIZE + TARGET_PADDING) + MARGIN),
-    50
-  );
-  */
 }
 
 function drawLine(typeOfLine) {
@@ -672,9 +655,9 @@ function insideRect(i) {
     ) {
       hit_x = target.x;
       hit_y = target.y;
-      console.log(official_x, official_y);
       fill(color(255, 255, 255));
       circle(target.x, target.y, 0.5 * PPCM);
+
       cursor_on_rectangle = true;
       return true;
     }
