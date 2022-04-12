@@ -522,6 +522,9 @@ function drawInputArea() {
 
   rect(inputArea.x, inputArea.y, inputArea.w, inputArea.h);
 
+  fill(color(255, 255, 255));
+  text("CHEAT VERSION DO NOT USE", inputArea.x, inputArea.y + 25);
+
   /*
   let i = trials[current_trial];
 
