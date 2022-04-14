@@ -60,15 +60,15 @@ function preload() {
 // Runs once at the start
 function setup() {
   createCanvas(700, 500); // window size in px before we go into fullScreen()
-  frameRate(60); // frame rate (DO NOT CHANGE!)
+  frameRate(144); // frame rate (DO NOT CHANGE!)
 
   randomizeTrials(); // randomize the trial order at the start of execution
 
   textFont("Arial", 18); // font size for the majority of the text
   drawUserIDScreen(); // draws the user start-up screen (student ID and display size)
 
-  hit_sound.setVolume(0.2);
-  miss_sound.setVolume(0.2);
+  hit_sound.setVolume(0.1);
+  miss_sound.setVolume(0.1);
 }
 
 let dist_targets = 0;
@@ -81,9 +81,13 @@ function draw() {
   if (!good_sequence) {
     let first = trials[0];
     let second = trials[1];
+
     a = calculateTotalDistance();
     if (a < 0) a = 1000000;
     if (a !== 1000000) {
+      fill(color(150, 150, 150));
+      textFont("Comic Sans", 24);
+      text("A calcular o melhor trial possivel", 500, 200);
       let original_distance = a;
       let i = 0;
       let best = a;
