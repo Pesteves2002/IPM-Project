@@ -38,6 +38,11 @@ const STREAK_BACKGROUND_COLOR = 3;
 
 let background_colour = DEFAULT_BACKGROUND_COLOR;
 
+// Sound variables
+
+let hit_sound;
+let miss_sound;
+
 // Target class (position and width)
 class Target {
   constructor(x, y, w) {
@@ -46,8 +51,6 @@ class Target {
     this.w = w;
   }
 }
-
-var miss_sound;
 
 function preload() {
   hit_sound = loadSound("pop.mp3");
@@ -67,6 +70,10 @@ function setup() {
   hit_sound.setVolume(1);
   miss_sound.setVolume(1);
 }
+
+let dist_targets = 0;
+let cursor_on_rectangle = false;
+let counter = 0;
 
 // Runs every frame and redraws the screen
 function draw() {
@@ -100,20 +107,38 @@ function draw() {
     let x = map(mouseX, inputArea.x, inputArea.x + inputArea.w, 0, width);
     let y = map(mouseY, inputArea.y, inputArea.y + inputArea.h, 0, height);
 
+    // Draw the user input area
+    drawInputArea();
+
+    // Draw the line from current to next
     drawLine(1);
+
+    // Calculate the shortest distance between two targets
+    dist_targets = dist(
+      getTargetBounds(1).x,
+      getTargetBounds(1).y,
+      getTargetBounds(2).x,
+      getTargetBounds(2).y
+    );
+
+    counter = 0;
 
     // Draw all 18 targets
     for (var i = 0; i < 18; i++) {
       drawTarget(i, x, y);
     }
 
+    if (counter === 18) {
+      cursor_on_rectangle = false;
+    }
+
+    // Draws the line from previous to curren
     drawLine(0);
 
-    // Draw the user input area
-    drawInputArea();
-
+    // Draw the instructions
     drawInstructions();
 
+    // Draw fake cursor
     fill(color(255, 255, 255));
     circle(x, y, 0.5 * PPCM);
   }
@@ -247,7 +272,7 @@ function mousePressed() {
         height
       );
 
-      if (dist(target.x, target.y, virtual_x, virtual_y) < target.w / 2) {
+      if (dist(target.x, target.y, hit_x, hit_y) < target.w / 2) {
         hits++;
         background_colour = HIT_BACKGROUND_COLOUR;
 
@@ -259,9 +284,9 @@ function mousePressed() {
         let previous_target = getTargetBounds(trials[current_trial - 1]);
 
         x1 = previous_target.x;
-        x2 = virtual_x;
+        x2 = hit_x;
         y1 = previous_target.y;
-        y2 = virtual_y;
+        y2 = hit_y;
 
         distance = Math.sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
         fitts_id = Math.log2(distance / target.w + 1);
@@ -303,6 +328,15 @@ function drawTarget(i, x, y) {
   // Get the location and size for target (i)
   let target = getTargetBounds(i);
 
+  noFill();
+  // Draw rectangle
+  strokeWeight(3);
+  stroke(color(255, 255, 255));
+  rectMode(CENTER);
+
+  rect(target.x, target.y, dist_targets, dist_targets);
+  rectMode(CORNER);
+
   if (trials[current_trial + 1] === i && trials[current_trial] === i) {
     fill(color(255, 192, 84));
     stroke(color(255, 192, 84));
@@ -332,7 +366,7 @@ function drawTarget(i, x, y) {
     }
   }
 
-  if (dist(target.x, target.y, x, y) < target.w / 2) {
+  if (dist(target.x, target.y, hit_x, hit_y) < target.w / 2) {
     stroke(color(255, 0, 0));
     strokeWeight(7);
   }
@@ -348,6 +382,39 @@ function drawTarget(i, x, y) {
     stroke(0);
     text("2x", target.x, target.y + 10);
     textAlign(LEFT);
+    fill(color(255, 192, 84));
+  }
+
+  let inputTargetX = map(
+    target.x,
+    0,
+    width,
+    inputArea.x,
+    inputArea.x + inputArea.w
+  );
+  let inputTargetY = map(
+    target.y,
+    0,
+    height,
+    inputArea.y,
+    inputArea.y + inputArea.h
+  );
+
+  // Draw rectangle
+  strokeWeight(3);
+  stroke(color(255, 255, 255));
+  rectMode(CENTER);
+
+  rect(
+    inputTargetX,
+    inputTargetY,
+    target.w * (inputArea.w / height),
+    target.w * (inputArea.w / height)
+  );
+  rectMode(CORNER);
+
+  if (!insideRect(i)) {
+    counter++;
   }
 }
 
@@ -420,23 +487,6 @@ function drawInputArea() {
   strokeWeight(2);
 
   rect(inputArea.x, inputArea.y, inputArea.w, inputArea.h);
-
-  /*
-  let i = trials[current_trial];
-
-  let target = getTargetBounds(i);
-
-  fill(color(255, 0, 0));
-  circle(
-    target.x -
-      parseInt(LEFT_PADDING) +
-      parseInt((i % 3) * (TARGET_SIZE + TARGET_PADDING) + MARGIN),
-    target.y -
-      parseInt(TOP_PADDING) +
-      parseInt(Math.floor(i / 3) * (TARGET_SIZE + TARGET_PADDING) + MARGIN),
-    50
-  );
-  */
 }
 
 function drawLine(typeOfLine) {
@@ -582,4 +632,35 @@ function drawInstructions() {
   text("Backgrounds:", inputArea.x, startY);
 
   textFont("Arial", 18); // font size for the majority of the text
+}
+
+let hit_x;
+let hit_y;
+
+function insideRect(i) {
+  let target = getTargetBounds(i);
+  let official_x;
+  let official_y;
+
+  official_x = map(mouseX, inputArea.x, inputArea.x + inputArea.w, 0, width);
+  official_y = map(mouseY, inputArea.y, inputArea.y + inputArea.h, 0, height);
+
+  if (
+    target.x - dist_targets / 2 < official_x &&
+    official_x < target.x + dist_targets / 2
+  ) {
+    if (
+      target.y - dist_targets / 2 < official_y &&
+      official_y < target.y + dist_targets / 2
+    ) {
+      hit_x = target.x;
+      hit_y = target.y;
+      fill(color(255, 255, 255));
+      circle(target.x, target.y, 0.5 * PPCM);
+
+      cursor_on_rectangle = true;
+      return true;
+    }
+  }
+  return false;
 }
