@@ -52,3 +52,8 @@ We implemented that.
 - [x] Add snapping
 - [x] Draw squares around the circles
 - [x] Draw squares woth logic at the user input area
+
+We also implemented 2 versions of the project:
+
+- Portal theme version
+- Cheating mode
