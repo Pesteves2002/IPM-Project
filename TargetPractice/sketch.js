@@ -288,7 +288,7 @@ function mousePressed() {
         y1 = previous_target.y;
         y2 = hit_y;
 
-        distance = Math.sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+        distance = dist(x1, y1, x2, y2);
         fitts_id = Math.log2(distance / target.w + 1);
         fitts_IDs[current_trial] = fitts_id;
         if (current_trial == 0) fitts_IDs[current_trial] = -1;
