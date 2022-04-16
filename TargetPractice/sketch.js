@@ -355,7 +355,7 @@ function drawTarget(i, x, y) {
       //
     } else {
       if (trials[current_trial + 1] === i) {
-        fill(color(0, 115, 27));
+        fill(color(13, 0, 255));
         noStroke();
       } else {
         // Does not draw a border if this is not the target the user
@@ -532,7 +532,7 @@ function drawInstructions() {
   noStroke();
   text("Target", inputArea.x + TARGET_SIZE * 1.7, startY);
 
-  fill(color(0, 115, 27));
+  fill(color(15, 0, 255));
   noStroke();
   circle(
     inputArea.x + inputArea.w / 2 + TARGET_SIZE * 0.5,
